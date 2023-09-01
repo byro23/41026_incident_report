@@ -1,0 +1,67 @@
+
+.incident-form {
+  max-width: 500px;
+  margin: 50px auto;
+  padding: 20px;
+  border: 1px solid #000000;
+  border-radius: 5px;
+}
+
+.incident-form h2 {
+  margin-bottom: 20px;
+}
+
+.incident-form__text-area {
+  margin-bottom: 15px;
+  
+}
+
+.incident-form__text-area label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.incident-form__text-area input[type="text"],
+.incident-form__text-area input[type="date"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 16px;
+}
+
+.incident-form__text-area select,
+.incident-form__text-area input[type="file"] {
+  width: 106%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 16px;
+}
+
+.incident-form__text-area select {
+  cursor: pointer;
+}
+
+.incident-form__text-area input[type="file"] {
+  padding: 5px 0;
+}
+
+.incident-form__text-area button {
+  margin-top: 15px;
+}
+
+.btn {
+  margin-top: 28px;
+    width: 165px;
+    height: 60px;
+    border-radius: 30px;
+    background: #B58DED;
+    border: none;
+    font-family: 'Montserrat';
+    font-size: 20px;
+    color: #FFFFFF;
+    box-shadow: 0 4px 8px 0 rgba(181, 141, 237, 0.7), 0 6px 20px 0 rgba(181, 141, 237, 0.9);
+    cursor: pointer;
+}
