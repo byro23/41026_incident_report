@@ -4,13 +4,14 @@ import './form.css';
 const Form = () => {
 
     const[formData, setFormData] = useState( {
-      witnessName: "",
-      offenderName: "",
-      date: "",
-      description: "",
-      incidentCategory: "",
-      severityLevel: "",
-      attachedFile: null
+        incidentTitle: "",
+        witnessName: "",
+        offenderName: "",
+        date: "",
+        description: "",
+        incidentCategory: "",
+        //severityLevel: "",
+        attachedFile: null
     })
 
     const handleFormChange = (event) => {
@@ -27,7 +28,7 @@ const Form = () => {
         event.preventDefault();
     }
 
-    const severityLevels = ["Low", "Medium", "High"];
+    // const severityLevels = ["Low", "Medium", "High"];
 
     const incidentCategories = ["Safety", "Security", "Technical", "Environmental"];
   
@@ -37,16 +38,8 @@ const Form = () => {
             <h2>Incident Form</h2>
             <form onSubmit={handleSubmit}>
                 <div className='incident-form__text-area'>
-                    <label htmlFor="name">Name of witness: </label>
-                    <input type='text' id='witnessName' name='witnessName' onChange={handleFormChange} value={formData.witnessName}></input>
-                </div>
-                <div className='incident-form__text-area'>
-                    <label htmlFor="phone">Your phone number: </label>
-                    <input type='text' id='phone' name='phone' placeholder=''></input>
-                </div>
-                <div className='incident-form__text-area'>
-                    <label htmlFor="name">Name of offender (if applicable): </label>
-                    <input type='text' id='offenderName' name='offenderName' value={formData.offenderName}></input>
+                    <label htmlFor="name">Incident Title: </label>
+                    <input type='text' id='incidentTitle' name='offenderName' value={formData.offenderName}></input>
                 </div>
                 <div className='incident-form__text-area'>
                     <label htmlFor="title">Location/Venue: </label>
@@ -68,19 +61,12 @@ const Form = () => {
                     </select>
                 </div>
                 <div className='incident-form__text-area'>
-                    <label htmlFor="level">Severity Level: </label>
-                    <select id="level" name='severityLevel' value={formData.severityLevel} onChange={handleFormChange}>
-                        <option value="" disabled>Select a level</option>
-                        {severityLevels.map((level, index) => (
-                            <option key={index} value={level}>
-                                {level}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <div className='incident-form__text-area'>
                     <label htmlFor="description">Incident Description: </label>
                     <input type='text' id='description' name='description'></input>
+                </div>
+                 <div className='incident-form__text-area'>
+                    <label htmlFor="name">Name of offender (if applicable): </label>
+                    <input type='text' id='offenderName' name='offenderName' value={formData.offenderName}></input>
                 </div>
                 <div className='incident-form__text-area'>
                     <label htmlFor="file">Attach image/video: </label>
