@@ -1,15 +1,19 @@
-import logo from './logo.svg';
-import './App.css';
-import Login from './component/login';
-import Form from './component/form';
+import "./App.css";
+import { PrimeReactProvider, PrimeReactContext } from "primereact/api";
+import "primereact/resources/primereact.min.css";
+import "primereact/resources/themes/lara-light-indigo/theme.css";
+
+import Login from "./component/login";
+import Form from "./component/form";
+import Archive from "./component/archive";
 
 function App() {
   return (
-    <>
-    <Login />
-    <Form/>
-    </>
-    
+    <PrimeReactProvider>
+      <Login />
+      <Form />
+      <Archive />
+    </PrimeReactProvider>
   );
 }
 
