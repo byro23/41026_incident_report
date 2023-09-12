@@ -6,7 +6,7 @@ class login extends Component {
     return (
       <div className="Login">
         <h4>Login</h4>
-        <form>
+        <form action="signup.js">
           <div className="text_area">
             <input
               type="text"
