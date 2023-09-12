@@ -80,7 +80,7 @@ const Form = () => {
                 <input className='btn' type='submit' value="Submit"></input>
             </form>
         </div>
-    ); // Pipeline test
+    ); // Pipeline
 }; 
 
 export default Form;
