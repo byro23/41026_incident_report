@@ -3,8 +3,6 @@
   max-width: 500px;
   margin: 50px auto;
   padding: 20px;
-  border: 1px solid #000000;
-  border-radius: 5px;
 }
 
 .incident-form h2 {
@@ -29,11 +27,12 @@
   border: 1px solid #ccc;
   border-radius: 3px;
   font-size: 16px;
+  background-position: top left;
 }
 
 .incident-form__text-area select,
 .incident-form__text-area input[type="file"] {
-  width: 106%;
+  width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 3px;
@@ -52,6 +51,24 @@
   margin-top: 15px;
 }
 
+.incident-form__text-area textarea#description {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 16px;
+}
+
+#incidentLocation:invalid , #incidentCategory:invalid {
+  color: gray;
+}
+
+.dropdown, .p-dropdown-items, .p-dropdown-item {
+  width: 100%;
+  text-align: left;
+}
+
+
 .btn {
   margin-top: 28px;
     width: 165px;
@@ -64,4 +81,8 @@
     color: #FFFFFF;
     box-shadow: 0 4px 8px 0 rgba(181, 141, 237, 0.7), 0 6px 20px 0 rgba(181, 141, 237, 0.9);
     cursor: pointer;
+}
+
+.custom-date {
+  width: 100%;
 }

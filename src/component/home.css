@@ -1,0 +1,41 @@
+/* Style for the entire container */
+.home {
+    display: flex;
+    flex-direction: column;
+    background-color: linear-gradient(135deg, #1b8af1, #b58ded);
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  /* Style the header */
+  .home-header {
+    margin-bottom: 20px;
+    color: white;
+  }
+  
+  /* Style the sidebar navigation */
+  .navbar {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: #333;
+    padding: 20px;
+    border-radius: 5px;
+  }
+  
+  /* Style the navigation links */
+  .nav-link {
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Hover effect for the navigation links */
+  .nav-link:hover {
+    background-color: #61dafb;
+    color: #282c34;
+  }
+  

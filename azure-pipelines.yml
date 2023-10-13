@@ -4,18 +4,43 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
 trigger:
-- main
+  - develop
 
 pool:
   vmImage: ubuntu-latest
 
 steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '18.17.1'
-  displayName: 'Install Node.js'
+  - task: NodeTool@0
+    inputs:
+      versionSpec: "18.17.1"
+    displayName: "Install Node.js"
 
-- script: |
-    npm install
-    npm run build
-  displayName: 'npm install and build'
+  - script: |
+      npm install
+      npm run build
+    displayName: "npm install and build"
+
+  - script: |
+      npm test form.test.js -- --watchAll=false
+    displayName: "form render, input, submit"
+
+  - script: |
+      npm test searchForms.test.js -- --watchAll=false
+    displayName: "search-forms renders"
+
+  - script: |
+      npm test viewForms.test.js -- --watchAll=false
+    displayName: "view-forms renders"
+
+  - script: |
+      npm test login.test.js -- --watchAll=false
+    displayName: "login renders"
+
+  - script: |
+      npm test newPass.test.js -- --watchAll=false
+    displayName: "forget-password renders"
+
+  - script: |
+      npm test signup.test.js -- --watchAll=false
+    displayName: "sign-up renders"   
+  

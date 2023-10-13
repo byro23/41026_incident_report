@@ -1,0 +1,141 @@
+Apply basic styles to the entire page body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 0;
+}
+
+.elementContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.search-container {
+  max-width: 70vw;
+}
+/* searchForms.css */
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
+
+.header {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* Apply to the .search-container element */
+.search-container {
+  display: flex;
+  align-items: center;
+}
+
+/* Style the label element */
+.label {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+/* Style the Dropdown component */
+.select {
+  width: 200px;
+  margin-right: 10px; /* Add margin for spacing */
+}
+
+/* Style the input element */
+.input-text {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.h3 {
+  font-size: 20px;
+  margin-top: 20px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.th {
+  background-color: #f2f2f2;
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+  font-weight: bold;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+td {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.status-label {
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-around;
+}
+
+.approve-button {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+.reject-button {
+  background-color: #f44336;
+  color: #fff;
+}
+
+.approve-button:hover,
+.reject-button:hover {
+  background-color: #45a049;
+}
+
+.no-results {
+  font-size: 18px;
+  margin-top: 20px;
+}
+
+.center-text {
+  text-align: center;
+  width: 100%;
+}
+
+.select .p-dropdown-item {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.centered-content {
+  max-width: 70vw;
+}
+.radioButton {
+  margin-left: 10px;
+  margin-right: 7px;
+  margin-top: 20px;
+}
+
+.p-datatable-tbody > tr:hover {
+  cursor: pointer;
+  background-color: #f2f2f2;
+}

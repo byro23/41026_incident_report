@@ -1,0 +1,59 @@
+/* Container for the entire component */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex; /* Use flex layout */
+  flex-direction: column; /* Arrange items vertically */
+  align-items: flex-start; /* Align items to the left */
+}
+
+/* Input and button styling */
+.search-input {
+  width: 100%;
+  margin-bottom: 10px; /* Add some spacing between input and results */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.search-button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* List styling */
+.mall-list {
+  list-style: none;
+  padding: 0;
+  width: 100%; /* Ensure the list takes up the entire container width */
+}
+
+.mall-item {
+  display: flex; /* Use flex layout for each item */
+  align-items: center; /* Vertically align items */
+  margin-bottom: 10px; /* Add some spacing between items */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Photos container styling */
+.photos-container {
+  display: flex;
+  flex-direction: column; /* Arrange photos vertically */
+  align-items: flex-end; /* Center photos vertically */
+  margin-left: 20px; /* Add spacing between text and photos */
+}
+
+.mall-photo {
+  max-width: 100px;
+  max-height: 100px;
+  margin: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
