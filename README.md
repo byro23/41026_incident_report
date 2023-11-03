@@ -1,6 +1,6 @@
 # Incident Reporting System
 
-This project provides an Incident Reporting system built using the React Javascript library for frontend and Express Js for backend.\\
+This project provides an Incident Reporting system built using the React Javascript library for frontend and Express Js for backend.\
 Node JS is required to run this project.
 
 ## Running the project
