@@ -25,7 +25,7 @@ If npm start fails, ensure all dependencies are installed using:
 Launches the test runner in the interactive watch mode.\
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-## Backend
+## Running the backend
 
 To run the backend server, navigate to the source directory in the terminal and run:
 
