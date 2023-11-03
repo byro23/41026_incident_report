@@ -27,6 +27,6 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 
 ## Running the backend
 
-To run the backend server, navigate to the source directory in the terminal and run:
+To run the backend server, navigate to the 'src' directory in the terminal and run:
 
 ### `node server.js`
