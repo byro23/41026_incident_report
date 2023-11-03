@@ -15,11 +15,13 @@ const UserArchive = ( {userData} ) => {
   const userId = userData ? userData._id : 'Id could not be retrieved in time';
   const [loading, setLoading] = useState(true);
 
+  // Navigate to incident component on row click
   const onRowClick = (event) => {
     const incidentID = event.data._id;
     navigate(`/incident/${incidentID}`);
   };
 
+  // Responsible for debouncing the search term
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
@@ -30,8 +32,9 @@ const UserArchive = ( {userData} ) => {
     };
   }, [searchTerm]);
 
+
+  // Responsible for retrieving incidents by search term
   useEffect(() => {
-    console.log(debouncedSearchTerm)
     if(debouncedSearchTerm !== "") {
       fetch(
         `http://localhost:4000/api/searchIncidents?searchTerm=${debouncedSearchTerm}&userId=${userId}`
@@ -55,6 +58,7 @@ const UserArchive = ( {userData} ) => {
     }
   }, [debouncedSearchTerm])
 
+  // Retrieves all forms associated with user
   const getIncidents = async () => {
     try {
       const response = await fetch(`http://localhost:4000/api/getFormsById?userId=${userId}`);
@@ -73,6 +77,7 @@ const UserArchive = ( {userData} ) => {
     }
   }
 
+  // Fetches incidents when the userData is retrieved
   useEffect(() => {
     const fetchIncidents = async () => {
       if (userData) {

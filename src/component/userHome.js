@@ -15,6 +15,7 @@ const UserHome = () => {
 
     const navigate = useNavigate();
 
+    // Function to retrieve currently logged in user
     const getUser = async () => {
         try {
             console.log('get name called')
@@ -39,6 +40,7 @@ const UserHome = () => {
         }
     };
 
+    // When the component mounts call getUser function
     useEffect(() => {
         const fetchName = async () => {
             const user = await getUser();
@@ -48,8 +50,10 @@ const UserHome = () => {
         fetchName();
     }, []);
 
+    // Set welcome message
     const welcomeMessage = userData ? `Welcome, ${userData.firstname}` : ''
 
+    // Nav bar items, calling state changes when clicked
     const items = [
         {
             label: welcomeMessage,

@@ -38,13 +38,15 @@ try {
   console.log(error);
 }
 
+// Create the GFS bucket
 let bucket;
 mongoose.connection.on("connected", () => {
+  // set the current mongoose connection
   var db = mongoose.connections[0].db;
+  // specify gridfs bucket name
   bucket = new mongoose.mongo.GridFSBucket(db, {
     bucketName: "uploads"
   });
-  //console.log(bucket);
 });
 
 //to parse json content
@@ -54,6 +56,7 @@ app.use(express.urlencoded({
   extended: false
 }));
 
+// Add crypto string to filename, specify storage location
 const storage = new GridFsStorage({
   url: dbUrl,
   file: (req, file) => {
@@ -102,6 +105,7 @@ app.post("/api/submit", async (req, res) => {
     offenderName = "N/A";
   }
 
+  // Create new form object to map to db
   try {
     const form = new Form({
       incidentTitle,
@@ -116,6 +120,7 @@ app.post("/api/submit", async (req, res) => {
       fileName
     });
 
+    // save to db
     await form.save();
 
     res.json({ message: "Incident submitted successfully" });
@@ -125,12 +130,10 @@ app.post("/api/submit", async (req, res) => {
   }
 });
 
+// Retrieve the file based on file name
 app.get("/api/image/:fileName", async (req, res) => {
   
   const file = await bucket.find({ filename: req.params.fileName }).toArray();
-
-  console.log("was reached")
-  console.log(file)
 
   // Check if the file exists.
   if (!file || file.length === 0) {
@@ -259,6 +262,7 @@ app.get("/api/getForms", async (req, res) => {
   }
 });
 
+// Retrieve form by id
 app.get("/api/getFormById/:id", async (req, res) => {
   const { id } = req.params;
   try {
@@ -273,6 +277,7 @@ app.get("/api/getFormById/:id", async (req, res) => {
   }
 });
 
+// Update form by id
 app.put("/api/updateForm/:id", async (req, res) => {
   const { id } = req.params;
   const { incidentTitle, offenderName, incidentCategory, date, incidentLocation, incidentDate, description, editNote } =
@@ -324,7 +329,6 @@ app.get("/api/searchIncidents", async (req, res) => {
       userId !== undefined &&
       searchTerm !== ""
     ) {
-      // Byron - Added this for my userArchive to search by title.
       incidents = await Form.find({
         userId: userId,
         incidentTitle: { $regex: searchTerm, $options: "i" },
