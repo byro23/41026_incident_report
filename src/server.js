@@ -1,10 +1,17 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
-const multer = require("multer");
-const Grid = require("gridfs-stream");
 const cors = require("cors");
 const nodemailer = require("nodemailer");
+const jwt = require("jsonwebtoken");
+
+// Dependencies for file uploads
+const multer = require("multer");
+const Grid = require("gridfs-stream");
+const {GridFsStorage} = require("multer-gridfs-storage")
+const bodyParser =  require("body-parser")
+const methodOverride = require("method-override")
+const crypto = require("crypto")
+const path = require("path")
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -18,6 +25,9 @@ app.use(bodyParser.json());
 const dbUrl =
   "mongodb+srv://blester7:yTGJYryN4t2RfVFC@cluster0.hr8ilkr.mongodb.net/IncidentReportingDB?retryWrites=true&w=majority";
 
+// static secretKey for JWT token
+const secretKey = "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY5ODcyNTQ5NCwiaWF0IjoxNjk4NzI1NDk0fQ.qTmMGNgXFJJj2O_Dzpc0_vGeZX_5reMEssHSQF8Uryk";
+
 // Connect to MongoDB
 try {
   mongoose.connect(dbUrl, {
@@ -27,6 +37,113 @@ try {
 } catch (error) {
   console.log(error);
 }
+
+let bucket;
+mongoose.connection.on("connected", () => {
+  var db = mongoose.connections[0].db;
+  bucket = new mongoose.mongo.GridFSBucket(db, {
+    bucketName: "uploads"
+  });
+  //console.log(bucket);
+});
+
+//to parse json content
+app.use(express.json());
+//to parse body from url
+app.use(express.urlencoded({
+  extended: false
+}));
+
+const storage = new GridFsStorage({
+  url: dbUrl,
+  file: (req, file) => {
+    return new Promise((resolve, reject) => {
+      crypto.randomBytes(16, (err, buf) => {
+        if (err) {
+          return reject(err);
+        }
+        const filename = buf.toString('hex') + path.extname(file.originalname);
+        const fileInfo = {
+          filename: filename,
+          bucketName: 'uploads'
+        };
+        resolve(fileInfo);
+      });
+    });
+  }
+});
+const upload = multer({ storage });
+
+// Route for uploading file
+app.post("/api/upload", upload.single('file'), (req, res) => {
+  res.json({ file: req.file });
+});
+
+// Routing for form submission
+
+app.post("/api/submit", async (req, res) => {
+
+  console.log("Form object", req.body)
+
+  let {
+    incidentTitle,
+    incidentLocation,
+    witnessName,
+    offenderName,
+    date,
+    description,
+    incidentCategory,
+    status,
+    userId,
+    fileName
+  } = req.body;
+
+  if (offenderName == "") {
+    offenderName = "N/A";
+  }
+
+  try {
+    const form = new Form({
+      incidentTitle,
+      incidentLocation,
+      witnessName,
+      offenderName,
+      date,
+      description,
+      incidentCategory,
+      status,
+      userId,
+      fileName
+    });
+
+    await form.save();
+
+    res.json({ message: "Incident submitted successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+app.get("/api/image/:fileName", async (req, res) => {
+  
+  const file = await bucket.find({ filename: req.params.fileName }).toArray();
+
+  console.log("was reached")
+  console.log(file)
+
+  // Check if the file exists.
+  if (!file || file.length === 0) {
+    return res.status(404).json({ err: "no files exist" });
+  }
+
+  // Open a read stream for the file.
+  const readStream = bucket.openDownloadStreamByName(req.params.fileName);
+
+  // Pipe the read stream to the HTTP response stream.
+  readStream.pipe(res);
+});
+
 
 // Routing for Email check
 app.post("/api/checkemail", async (req, res) => {
@@ -116,48 +233,15 @@ app.post("/api/login", async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    return res.status(200).json({ message: "Login successful", user: user });
-  } catch (error) {}
-});
-
-// Routing for form submission
-
-app.post("/api/submit", async (req, res) => {
-  let {
-    incidentTitle,
-    incidentLocation,
-    witnessName,
-    offenderName,
-    date,
-    description,
-    incidentCategory,
-    status,
-    userId,
-  } = req.body;
-
-  if (offenderName == "") {
-    offenderName = "N/A";
-  }
-
-  try {
-    const form = new Form({
-      incidentTitle,
-      incidentLocation,
-      witnessName,
-      offenderName,
-      date,
-      description,
-      incidentCategory,
-      status,
-      userId,
+    // Create a JWT with user information and sign it with the secret key
+    const token = jwt.sign({ userId: user._id, email: user.email }, secretKey, {
+      expiresIn: "2d", // Token expires 2 Days
     });
 
-    await form.save();
-
-    res.json({ message: "Incident submitted successfully" });
+    return res.status(200).json({ message: "Login successful", user: user, token: token });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: "An error occurred" });
   }
 });
 
@@ -191,7 +275,7 @@ app.get("/api/getFormById/:id", async (req, res) => {
 
 app.put("/api/updateForm/:id", async (req, res) => {
   const { id } = req.params;
-  const { incidentTitle, incidentLocation, incidentDate, description } =
+  const { incidentTitle, offenderName, incidentCategory, date, incidentLocation, incidentDate, description, editNote } =
     req.body;
   console.log(req.body);
   try {
@@ -204,6 +288,10 @@ app.put("/api/updateForm/:id", async (req, res) => {
     form.incidentLocation = incidentLocation;
     form.incidentDate = incidentDate;
     form.description = description;
+    form.date = date;
+    form.offenderName = offenderName;
+    form.incidentCategory = incidentCategory;
+    form.editNote = editNote;
 
     await form.save();
 
@@ -310,6 +398,27 @@ app.post("/api/user", async (req, res) => {
   return res.status(200).json({ message: "User found", user: user });
 });
 
+app.delete("/api/incidentdelete/:id", async (req, res) => {
+    const { id } = req.params;
+
+    console.log(`Id is: ${id}`);
+
+    try {
+      const deletedForm = await Form.findByIdAndDelete(id)
+      if(!deletedForm) {
+        return res.status(404).json({ message: "Form not found"})
+      }
+
+      res.status(200).json({ message : "Form deleted successfully."})
+
+    }
+    catch(error) {
+      console.error(error)
+      res.status(500).json( { message : "Error deleting form"})
+    }
+});
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+

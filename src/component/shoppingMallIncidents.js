@@ -10,60 +10,40 @@ import { ProgressSpinner } from "primereact/progressspinner";
 import { DataTable } from "primereact/datatable";
 import { useNavigate } from "react-router-dom";
 import { Column } from "primereact/column";
+import { useParams } from "react-router-dom";
 
-const SearchIncidents = () => {
-  // State variables
-  const [searchCriteria, setSearchCriteria] = useState("incidentLocation"); // Default to "location"
-  const [searchTerm, setSearchTerm] = useState("");
+// This component represents a page for displaying incidents related to a shopping mall.
+const ShoppingMallIncidents = () => {
+  // Get the mallName parameter from the URL using useParams from React Router.
+  const { mallName } = useParams();
 
+  // State variables for managing incidents data and loading status.
   const [incidents, setIncidents] = useState([]);
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
   const [initialStatus, setInitialStatus] = useState("pending");
   const navigate = useNavigate();
 
-  // Effect to debounce the search term
+  // useEffect hook for fetching incident data when the component mounts.
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedSearchTerm(searchTerm);
-    }, 100);
+    fetch(
+      `http://localhost:4000/api/searchIncidents?searchCriteria=${"incidentLocation"}&searchTerm=${mallName}`
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => setIncidents(data))
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
 
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [searchTerm]);
-
-  // Effect to fetch incidents based on search criteria and term
-  useEffect(() => {
-    if (debouncedSearchTerm !== undefined) {
-      console.log(debouncedSearchTerm);
-      fetch(
-        `http://localhost:4000/api/searchIncidents?searchCriteria=${searchCriteria}&searchTerm=${debouncedSearchTerm}`
-      )
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          return response.json();
-        })
-        .then((data) => setIncidents(data))
-        .catch((error) => {
-          console.error("Error fetching data:", error);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    } else {
-      setIncidents([]);
-    }
-  }, [debouncedSearchTerm, searchCriteria]);
-
-  // Function to handle search term input change
-  const handleSearch = (e) => {
-    setSearchTerm(e);
-  };
-
-  // Function to update incident status
+  // Function to handle changing the status of an incident.
   const handleStatus = (id, status) => {
     const requestBody = {
       id: id,
@@ -81,8 +61,7 @@ const SearchIncidents = () => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-
-        // Update incidents with the new status
+        // Update the incidents list with the new status.
         const updatedIncidents = incidents.map((form) => {
           if (form._id === id) {
             return { ...form, status: status };
@@ -99,25 +78,18 @@ const SearchIncidents = () => {
       });
   };
 
-  // Function to handle change in search criteria
-  const handleSearchCriteriaChange = (e) => {
-    setSearchCriteria(e);
-    setSearchTerm("");
-  };
-
-  // Function to navigate to incident details page
+  // Function to handle clicking on a row and navigate to the incident details page.
   const onRowClick = (event) => {
     const incidentID = event.data._id;
     console.log(incidentID);
     navigate(`/incident/${incidentID}`);
   };
 
-  // Function to render action buttons for each incident
+  // Function to render action buttons for each incident based on its status.
   const actionButton = (rowData) => {
     if (rowData.status === "pending") {
       return (
         <div className="button-container">
-          {/* Button to approve the incident */}
           <Button
             icon="pi pi-check"
             tooltip="Approve"
@@ -125,7 +97,6 @@ const SearchIncidents = () => {
             onClick={() => handleStatus(rowData._id, "Approved")}
             disabled={rowData.status === "Approved"}
           />
-          {/* Button to reject the incident */}
           <Button
             icon="pi pi-times"
             tooltip="Reject"
@@ -136,89 +107,62 @@ const SearchIncidents = () => {
         </div>
       );
     } else {
-      return null;
+      return null; // Don't render buttons for incidents with status other than 'pending'.
     }
   };
-
   return (
     <div className="elementContainer">
-      {/* User Interface */}
-      <div className="search-container">
-        {/* Search criteria dropdown */}
-        <label className="label" htmlFor="search-criteria">
-          Search Criteria:
-        </label>
-        <Dropdown
-          id="search-criteria"
-          className="select"
-          value={searchCriteria}
-          options={[
-            { label: "Location", value: "incidentLocation" },
-            { label: "Incident Title", value: "incidentTitle" },
-            { label: "Incident Category", value: "incidentCategory" },
-          ]}
-          onChange={(e) => handleSearchCriteriaChange(e.value)}
-          placeholder="Select a criteria"
-        />
-        {/* Search term input */}
-        <input
-          type="text"
-          id="search-term"
-          className="input-text"
-          value={searchTerm}
-          placeholder="Search..."
-          onChange={(e) => handleSearch(e.target.value)}
-        />
-      </div>
-      {/* Radio buttons for initial status filter */}
       <div>
-        <span>
-          <RadioButton
-            className="radioButton"
-            inputId="item1"
-            name="status"
-            value="Approved"
-            onChange={(e) => setInitialStatus(e.value)}
-            checked={initialStatus === "Approved"}
+        <div className="top-bar">
+          <Button
+            icon="pi pi-arrow-left"
+            tooltip="Admin Home"
+            className="return-button"
+            onClick={() => navigate(-1)}
           />
-          <label htmlFor="item1" className="ml-4">
-            Approved
-          </label>
-        </span>
-        <span>
-          <RadioButton
-            className="radioButton"
-            inputId="item2"
-            name="status"
-            value="pending"
-            onChange={(e) => setInitialStatus(e.value)}
-            checked={initialStatus === "pending"}
-          />
-          <label htmlFor="item2" className="ml-4">
-            Pending
-          </label>
-        </span>
-        <span>
-          <RadioButton
-            className="radioButton"
-            inputId="item3"
-            name="status"
-            value="Rejected"
-            onChange={(e) => setInitialStatus(e.value)}
-            checked={initialStatus === "Rejected"}
-          />
-          <label htmlFor="item3" className="ml-4">
-            Rejected
-          </label>
-        </span>
-      </div>
-      {/* Display search results */}
-      <div>
-        {searchTerm === "" ? (
-          <h3 className="h3 center-text">All Incidents</h3>
-        ) : (
-          <h3 className="h3 center-text">Search Results:</h3>
-        )}
+          <h1 className="h3 center-text">{mallName} Incidents</h1>
+        </div>
+        <div className="radio-buttons-container">
+          <span>
+            <RadioButton
+              className="radioButton"
+              inputId="item1"
+              name="status"
+              value="Approved"
+              onChange={(e) => setInitialStatus(e.value)}
+              checked={initialStatus === "Approved"}
+            />
+            <label htmlFor="item1" className="ml-4">
+              Approved
+            </label>
+          </span>
+          <span>
+            <RadioButton
+              className="radioButton"
+              inputId="item2"
+              name="status"
+              value="pending"
+              onChange={(e) => setInitialStatus(e.value)}
+              checked={initialStatus === "pending"}
+            />
+            <label htmlFor="item2" className="ml-4">
+              Pending
+            </label>
+          </span>
+          <span>
+            <RadioButton
+              className="radioButton"
+              inputId="item3"
+              name="status"
+              value="Rejected"
+              onChange={(e) => setInitialStatus(e.value)}
+              checked={initialStatus === "Rejected"}
+            />
+            <label htmlFor="ingredient3" className="ml-4">
+              Rejected
+            </label>
+          </span>
+        </div>
 
         {incidents.length > 0 ? (
           <>
@@ -232,6 +176,7 @@ const SearchIncidents = () => {
                   )}
                   paginator
                   rows={10}
+                  sortField="status"
                   onRowClick={onRowClick}
                   size="normal"
                 >
@@ -264,6 +209,7 @@ const SearchIncidents = () => {
                     sortable
                   ></Column>
                   <Column field="status" header="Status" sortable></Column>
+
                   <Column header="Action" body={actionButton} />
                 </DataTable>
               )}
@@ -276,5 +222,4 @@ const SearchIncidents = () => {
     </div>
   );
 };
-
-export default SearchIncidents;
+export default ShoppingMallIncidents;

@@ -1,17 +1,11 @@
 
 .incident-form {
   max-width: 500px;
-  margin: 50px auto;
-  padding: 20px;
-}
-
-.incident-form h2 {
-  margin-bottom: 20px;
+  margin: 30px auto;
 }
 
 .incident-form__text-area {
   margin-bottom: 15px;
-  
 }
 
 .incident-form__text-area label {
@@ -68,21 +62,25 @@
   text-align: left;
 }
 
-
-.btn {
-  margin-top: 28px;
-    width: 165px;
-    height: 60px;
-    border-radius: 30px;
-    background: #B58DED;
-    border: none;
-    font-family: 'Montserrat';
-    font-size: 20px;
-    color: #FFFFFF;
-    box-shadow: 0 4px 8px 0 rgba(181, 141, 237, 0.7), 0 6px 20px 0 rgba(181, 141, 237, 0.9);
-    cursor: pointer;
-}
-
 .custom-date {
   width: 100%;
+}
+#fileupload {
+  width: 120%;
+  padding-bottom: 10px;
+}
+
+.fileupload-container {
+  .centered-element {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.progress-spinner {
+  position: absolute;
+  top: 50%; /* Vertically center the spinner */
+  left: 50%; /* Horizontally center the spinner */
+  transform: translate(-50%, -50%); /* Center the spinner precisely */
 }

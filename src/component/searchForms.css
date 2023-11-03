@@ -139,3 +139,18 @@ td {
   cursor: pointer;
   background-color: #f2f2f2;
 }
+.radio-buttons-container {
+  margin-bottom: 20px; /* Adjust the margin as needed for vertical spacing */
+}
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.return-button {
+  font-size: 1.5rem;
+  margin-right: 20px;
+  /* background-color: rgb(110, 110, 206); */
+}

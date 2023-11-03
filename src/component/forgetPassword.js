@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import './forgetPassword.css'
+import { InputText } from "primereact/inputtext";
+import { Button } from "primereact/button";
+import {Link} from 'react-router-dom';
 
 
 function ForgetPassword() {
@@ -70,14 +73,15 @@ function ForgetPassword() {
           {/* You can display a message or redirect the user to a login page */}
         </div>
       ) : (
-        <div>
-          <h1>Reset Password</h1>
+        <div className="forgot-container">
+          <h4>Reset Password</h4>
           <form onSubmit={handleSubmit}>
             <div>
-              <label>Email:</label>
-              <input
+              <InputText
                 type="email"
                 value={email}
+                className="text-area"
+                placeholder="Confirm email"
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
@@ -86,30 +90,33 @@ function ForgetPassword() {
               <div className="error">Email not found in the database.</div>
             )}
             <div>
-              <label>New Password:</label>
-              <input
+              <InputText
                 type="password"
+                placeholder="New password"
                 value={password}
                 onChange={handlePasswordChange}
                 required
+                className="text-area"
               />
             </div>
             <div>
-              <label>Confirm New Password:</label>
-              <input
+              <InputText
                 type="password"
                 value={confirmPassword}
                 onChange={handleConfirmPasswordChange}
                 required
+                placeholder="Confirm password"
+                className="text-area"
               />
             </div>
             {passwordMatchError && (
               <div className="error">{passwordMatchError}</div>
             )}
             <div>
-              <button type="submit">Reset Password</button>
+              <Button type="submit" rounded raised label="Submit"/>
             </div>
           </form>
+          <Link className="link" to='/login.js'>Return to login</Link>
         </div>
       )}
     </div>

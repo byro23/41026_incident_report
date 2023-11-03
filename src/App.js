@@ -18,6 +18,7 @@ import UserHome from "./component/userHome";
 import AdminHome from "./component/adminHome";
 import Incident from "./component/incident";
 import EditIncident from "./component/editIncident";
+import ShoppingMallIncidents from "./component/shoppingMallIncidents";
 
 function App() {
   return (
@@ -37,6 +38,10 @@ function App() {
           <Route path="/forgetPassword.js" element={<ForgetPassword />} />
           <Route path="/adminHome.js/:userId" element={<AdminHome />} />
           <Route path="/incident/:id/edit" element={<EditIncident />} />
+          <Route
+            path="/shoppingMallIncidents.js/:mallName"
+            element={<ShoppingMallIncidents />}
+          />
         </Routes>
       </Router>
     </PrimeReactProvider>

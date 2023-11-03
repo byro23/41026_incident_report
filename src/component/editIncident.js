@@ -19,6 +19,7 @@ function EditIncident({ updateVisible, getIncident }) {
     description: "",
     incidentCategory: "",
     status: "",
+    editNote: "",
   });
   const [loading, setLoading] = useState(false);
 
@@ -26,6 +27,7 @@ function EditIncident({ updateVisible, getIncident }) {
     (e) => {
       e.preventDefault();
       setLoading(true);
+      // Send a PUT request to the server to update the form
       fetch(`http://localhost:4000/api/updateForm/${id}`, {
         method: "PUT",
         headers: {
@@ -46,11 +48,29 @@ function EditIncident({ updateVisible, getIncident }) {
     [formData, id, updateVisible]
   );
 
+  function sanitiseInput(input) {
+    const str = String(input);
+
+    const tempDiv = document.createElement("div");
+    tempDiv.textContent = str;
+
+    return tempDiv.innerHTML;
+  }
+
+  // Get existing incident data from server and update form data
   useEffect(() => {
     fetch(`http://localhost:4000/api/getFormById/${id}`)
       .then((response) => response.json())
       .then((data) => {
-        setFormData(data);
+        setFormData({
+          incidentTitle: data.incidentTitle,
+          incidentLocation: data.incidentLocation,
+          offenderName: data.offenderName,
+          date: data.date,
+          description: data.description,
+          incidentCategory: data.incidentCategory,
+          status: data.status,
+        });
         document.title = data.incidentTitle;
       })
       .catch((error) => {
@@ -65,12 +85,16 @@ function EditIncident({ updateVisible, getIncident }) {
           {loading && <ProgressSpinner />}
           <Panel header="Edit Incident Details">
             <form onSubmit={handleSubmit}>
+              {/* Form fields for editing the incident details */}
               <label htmlFor="incidentTitle">Incident Title:</label>
               <InputText
                 id="incidentTitle"
                 value={formData.incidentTitle}
                 onChange={(e) =>
-                  setFormData({ ...formData, incidentTitle: e.target.value })
+                  setFormData({
+                    ...formData,
+                    incidentTitle: sanitiseInput(e.target.value),
+                  })
                 }
               />
 
@@ -103,7 +127,10 @@ function EditIncident({ updateVisible, getIncident }) {
                 id="offenderName"
                 value={formData.offenderName}
                 onChange={(e) =>
-                  setFormData({ ...formData, offenderName: e.target.value })
+                  setFormData({
+                    ...formData,
+                    offenderName: sanitiseInput(e.target.value),
+                  })
                 }
               />
 
@@ -114,7 +141,10 @@ function EditIncident({ updateVisible, getIncident }) {
                 name="date"
                 value={new Date(formData.date)}
                 onChange={(e) =>
-                  setFormData({ ...formData, date: e.target.value })
+                  setFormData({
+                    ...formData,
+                    date: sanitiseInput(e.target.value),
+                  })
                 }
               />
 
@@ -123,7 +153,10 @@ function EditIncident({ updateVisible, getIncident }) {
                 id="description"
                 value={formData.description}
                 onChange={(e) =>
-                  setFormData({ ...formData, description: e.target.value })
+                  setFormData({
+                    ...formData,
+                    description: sanitiseInput(e.target.value),
+                  })
                 }
               />
 
@@ -148,7 +181,10 @@ function EditIncident({ updateVisible, getIncident }) {
                   },
                 ]}
                 onChange={(e) =>
-                  setFormData({ ...formData, incidentCategory: e.target.value })
+                  setFormData({
+                    ...formData,
+                    incidentCategory: sanitiseInput(e.target.value),
+                  })
                 }
               />
 
@@ -158,7 +194,21 @@ function EditIncident({ updateVisible, getIncident }) {
                 id="status"
                 value={formData.status}
                 onChange={(e) =>
-                  setFormData({ ...formData, description: e.target.value })
+                  setFormData({
+                    ...formData,
+                    description: sanitiseInput(e.target.value),
+                  })
+                }
+              />
+              <label htmlFor="editNote">Edit Notes:</label>
+              <InputTextarea
+                id="editNote"
+                value={formData.editNote}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    editNote: sanitiseInput(e.target.value),
+                  })
                 }
               />
               <Button type="submit" label="Submit" />

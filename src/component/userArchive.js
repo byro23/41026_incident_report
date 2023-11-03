@@ -16,7 +16,7 @@ const UserArchive = ( {userData} ) => {
   const [loading, setLoading] = useState(true);
 
   const onRowClick = (event) => {
-    const incidentID = event.data.incidentID;
+    const incidentID = event.data._id;
     navigate(`/incident/${incidentID}`);
   };
 
@@ -87,7 +87,7 @@ const UserArchive = ( {userData} ) => {
     <>
       <span className="p-input-icon-left">
         <i className="pi pi-search" />
-        <InputText placeholder="Search" onChange={(e) => setSearchTerm(e.target.value)} />
+        <InputText placeholder="Search by title..." onChange={(e) => setSearchTerm(e.target.value)} />
       </span>
       <div className="data-table">
         {loading ? (

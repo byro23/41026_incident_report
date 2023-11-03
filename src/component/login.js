@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import "./login.css";
 import { useNavigate, Link } from "react-router-dom";
+import { InputText } from "primereact/inputtext";
+import { Button } from "primereact/button";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -36,13 +38,17 @@ const Login = () => {
 
       if (response.status === 200) {
         const data = await response.json();
+        const token = data.token;
         const userId = data.user._id;
+
+        // Store the token in localStorage for future use
+        localStorage.setItem("token", token);
 
         console.log(userId);
         console.log("Login successful");
         setStatus("Details correct. Logging in.");
 
-        if (userId === `6525084dc93df7b411560ea4`) {
+        if (userId === `653cca249335e2b7841dc54f`) {
           setTimeout(() => {
             navigate(`/adminHome.js/${userId}`);
           }, 2000);
@@ -65,22 +71,26 @@ const Login = () => {
     <div className="Login">
       <h4>Login</h4>
       <form onSubmit={handleSubmit}>
-        <input
+        <InputText
           type="text"
           name="email"
           onChange={handleInputChange}
           id="email"
           placeholder="Email"
-        ></input>
-        <input
+          className="text-area"
+          required
+        ></InputText>
+        <InputText
           type="password"
           name="password"
           onChange={handleInputChange}
           id="password"
           placeholder="Password"
-        ></input>
+          className = "text-area"
+          required
+        ></InputText>
         {status && <p className="status">{status}</p>}
-        <input type="submit" value="LOGIN" className="btn" />
+        <Button className="" raised type="submit" rounded label="LOGIN" />
       </form>
       <Link className="link" to="/signup.js">
         Sign up
@@ -93,3 +103,4 @@ const Login = () => {
 };
 
 export default Login;
+
